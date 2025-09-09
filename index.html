@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ice Cream Dashboard</title>
+  <title>Ice Cream Dashboard 🍦</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
 
     body {
-      margin: 0; padding: 0;
-      font-family: 'Poppins', sans-serif;
-      background: #fdf6e3;
-      min-height: 100vh;
+      margin: 0;
+      font-family: 'Nunito', sans-serif;
+      background: #fffaf0;
       color: #333;
       display: flex;
       flex-direction: column;
@@ -19,229 +22,284 @@
     }
 
     header {
-      background: linear-gradient(90deg, #f94d6a, #ffa751);
-      padding: 1.5rem 0;
+      background: linear-gradient(135deg, #ff7eb9 0%, #ff65a3 100%);
+      padding: 1.5rem 2rem;
+      color: #fff;
       text-align: center;
-      color: white;
-      font-weight: 700;
-      font-size: 2.4rem;
-      letter-spacing: 2px;
-      box-shadow: 0 4px 15px rgba(249,77,106,0.5);
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      box-shadow: 0 4px 15px rgba(255, 101, 163, 0.6);
       user-select: none;
       flex-shrink: 0;
     }
 
-    .container {
-      max-width: 1000px;
+    main {
+      flex-grow: 1;
+      max-width: 1100px;
       margin: 2rem auto 4rem;
       padding: 0 1rem;
-      flex-grow: 1;
+      width: 100%;
     }
 
     #searchInput {
-      width: 100%;
-      max-width: 400px;
       display: block;
+      width: 100%;
+      max-width: 450px;
       margin: 0 auto 2.5rem auto;
-      padding: 0.75rem 1rem;
-      font-size: 1.1rem;
-      border: 2px solid #ffa751;
-      border-radius: 25px;
+      padding: 0.85rem 1.25rem;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      border: 2px solid #ff65a3;
       outline: none;
       transition: box-shadow 0.3s ease;
+      font-weight: 600;
+      color: #ff65a3;
+      background: #fff0f6;
+      box-shadow: inset 0 1px 4px rgba(255, 101, 163, 0.3);
+    }
+    #searchInput::placeholder {
+      color: #ffa9c9;
+      font-weight: 400;
     }
     #searchInput:focus {
-      box-shadow: 0 0 12px #ffa751;
+      box-shadow: 0 0 12px #ff65a3;
+      border-color: #ff4382;
+      background: #ffe6f0;
+      color: #ff4382;
     }
 
-    .grid {
+    .brand-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
       gap: 2rem;
     }
 
-    .card {
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    .brand-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 12px 24px rgba(255, 101, 163, 0.15);
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: transform 0.3s ease;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
+      border: 4px solid transparent;
     }
-    .card:hover {
+    .brand-card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      border-color: #ff65a3;
+      box-shadow: 0 20px 36px rgba(255, 101, 163, 0.3);
     }
 
     .brand-header {
-      padding: 1rem 1.5rem;
       display: flex;
       align-items: center;
-      gap: 1rem;
-      background: var(--brand-color);
-      color: white;
+      gap: 1.25rem;
+      background: var(--brand-color, #ff65a3);
+      padding: 1.3rem 1.75rem;
+      color: #fff;
+      text-shadow: 1px 1px 6px rgba(0,0,0,0.2);
     }
 
     .brand-logo {
-      width: 70px;
-      height: 70px;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
+      background: #fff;
+      padding: 8px;
       object-fit: contain;
-      background: white;
-      padding: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 14px rgba(255, 101, 163, 0.35);
       flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+    .brand-card:hover .brand-logo {
+      transform: scale(1.1);
+      box-shadow: 0 8px 22px rgba(255, 101, 163, 0.55);
     }
 
     .brand-name {
-      font-size: 1.6rem;
-      font-weight: 700;
+      font-size: 1.75rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
       flex-grow: 1;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
 
     .brand-desc {
-      padding: 1rem 1.5rem;
+      padding: 1.25rem 2rem 2rem;
       font-style: italic;
-      color: #555;
+      font-weight: 600;
+      font-size: 1rem;
+      line-height: 1.35;
+      color: #666;
       flex-grow: 1;
-      line-height: 1.3;
     }
 
     .flavors-section {
-      padding: 0 1.5rem 1.5rem 1.5rem;
+      padding: 0 2rem 2rem;
     }
 
     .flavors-title {
       font-weight: 700;
-      margin-bottom: 0.8rem;
-      color: var(--brand-color);
       font-size: 1.2rem;
+      color: var(--brand-color, #ff65a3);
+      margin-bottom: 1rem;
+      letter-spacing: 0.1em;
       text-align: center;
-      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
 
     .flavors-grid {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 1rem;
+      gap: 1.3rem;
     }
 
     .flavor-card {
-      width: 90px;
+      width: 100px;
       text-align: center;
-      font-weight: 600;
+      font-weight: 700;
       color: #444;
-      font-size: 0.9rem;
-      cursor: default;
+      font-size: 0.95rem;
       user-select: none;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 5px 18px rgba(0,0,0,0.08);
+      background: #fff;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: default;
+    }
+
+    .flavor-card:hover {
+      transform: translateY(-6px) scale(1.05);
+      box-shadow: 0 10px 28px rgba(255, 101, 163, 0.25);
+      color: #ff4382;
     }
 
     .flavor-card img {
-      width: 90px;
-      height: 90px;
-      border-radius: 15px;
+      width: 100%;
+      height: 100px;
       object-fit: cover;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-      margin-bottom: 0.4rem;
-      transition: transform 0.25s ease;
-    }
-
-    .flavor-card img:hover {
-      transform: scale(1.1);
-      box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+      display: block;
+      border-bottom: 2px solid #ff65a3;
     }
 
     p.no-results {
       text-align: center;
-      font-weight: 700;
-      font-size: 1.3rem;
-      margin-top: 3rem;
-      color: #f94d6a;
-      letter-spacing: 1px;
+      font-weight: 900;
+      font-size: 1.5rem;
+      margin-top: 4rem;
+      color: #ff4382;
+      letter-spacing: 0.1em;
     }
 
-    /* Bottom Gallery Styles */
+    /* Footer Gallery */
     footer {
-      background: #fff8e1;
-      padding: 1rem 0 3rem;
-      box-shadow: inset 0 8px 12px -10px rgba(0,0,0,0.1);
+      background: #fff0f6;
+      padding: 2rem 0 3rem;
+      box-shadow: inset 0 8px 15px -12px rgba(255, 101, 163, 0.15);
       flex-shrink: 0;
     }
 
     .gallery-container {
-      max-width: 1000px;
+      max-width: 1100px;
       margin: 0 auto;
       padding: 0 1rem;
     }
 
     .gallery-title {
-      font-weight: 700;
-      font-size: 1.8rem;
+      font-weight: 900;
+      font-size: 2rem;
       text-align: center;
-      margin-bottom: 1rem;
-      color: #f94d6a;
-      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+      color: #ff4382;
+      letter-spacing: 0.12em;
       user-select: none;
+      text-transform: uppercase;
+      font-family: 'Nunito', sans-serif;
     }
 
     .gallery {
       display: flex;
       overflow-x: auto;
-      gap: 1rem;
-      padding-bottom: 0.5rem;
+      gap: 1.3rem;
+      padding-bottom: 0.7rem;
       scrollbar-width: thin;
-      scrollbar-color: #f94d6a #ffd9b3;
+      scrollbar-color: #ff4382 #ffd4e6;
+      scroll-behavior: smooth;
     }
     .gallery::-webkit-scrollbar {
-      height: 8px;
+      height: 10px;
     }
     .gallery::-webkit-scrollbar-track {
-      background: #ffd9b3;
-      border-radius: 10px;
+      background: #ffd4e6;
+      border-radius: 12px;
     }
     .gallery::-webkit-scrollbar-thumb {
-      background: #f94d6a;
-      border-radius: 10px;
+      background: #ff4382;
+      border-radius: 12px;
     }
 
     .gallery img {
-      height: 120px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(249,77,106,0.5);
+      height: 130px;
+      border-radius: 18px;
+      box-shadow: 0 6px 18px rgba(255, 101, 163, 0.45);
       object-fit: cover;
       flex-shrink: 0;
-      transition: transform 0.3s ease;
       cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      filter: drop-shadow(0 0 0.2rem #ff4382aa);
     }
     .gallery img:hover {
       transform: scale(1.1);
-      box-shadow: 0 8px 25px rgba(249,77,106,0.7);
+      box-shadow: 0 12px 32px rgba(255, 101, 163, 0.8);
+      filter: drop-shadow(0 0 0.5rem #ff4382cc);
+    }
+
+    @media (max-width: 480px) {
+      .flavor-card {
+        width: 80px;
+        font-size: 0.85rem;
+      }
+      .flavor-card img {
+        height: 80px;
+      }
+      .brand-header {
+        flex-direction: column;
+        gap: 0.8rem;
+        padding: 1rem 1rem;
+      }
+      .brand-logo {
+        width: 60px;
+        height: 60px;
+      }
+      .brand-name {
+        font-size: 1.3rem;
+      }
     }
   </style>
 </head>
 <body>
 
-<header>Ice Cream Collections Dashboard</header>
+<header>ICE CREAM COLLECTIONS</header>
 
-<div class="container">
+<main>
   <input
     id="searchInput"
     type="text"
     placeholder="Search brands or flavors..."
     oninput="filterBrands()"
+    aria-label="Search ice cream brands or flavors"
   />
 
-  <div class="grid" id="brandsContainer"></div>
-</div>
+  <section class="brand-grid" id="brandsContainer" aria-live="polite"></section>
+</main>
 
 <footer>
   <div class="gallery-container">
     <h2 class="gallery-title">Delicious Ice Cream Gallery</h2>
-    <div class="gallery" id="icecreamGallery">
+    <div class="gallery" id="icecreamGallery" aria-label="Ice cream images gallery">
       <!-- Gallery images inserted by JS -->
     </div>
   </div>
@@ -317,137 +375,6 @@
         },
         {
           name: 'Jamoca',
-          img: 'https://www.baskinrobbins.com/content/dam/baskinrobbins/global/images/products/Jamoca.png'
-        },
-      ],
-    },
-    {
-      name: 'Magnum',
-      color: '#6f4e37',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/Magnum_ice_cream_logo.png',
-      description: 'Luxurious ice cream bars with thick chocolate coating.',
-      flavors: [
-        {
-          name: 'Classic',
-          img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Magnum_Ice_Cream_Classic.jpg/220px-Magnum_Ice_Cream_Classic.jpg'
-        },
-        {
-          name: 'Almond',
-          img: 'https://upload.wikimedia.org/wikipedia/commons/8/8e/Magnum_ice_cream_almond.jpg'
-        },
-        {
-          name: 'Double Caramel',
-          img: 'https://magnumicecream.com/sites/default/files/styles/product_400px/public/2021-03/Magnum_DoubleCaramel.png'
-        },
-        {
-          name: 'White Chocolate & Cookies',
-          img: 'https://magnumicecream.com/sites/default/files/styles/product_400px/public/2021-03/Magnum_WhiteChocolateCookies.png'
-        },
-      ],
-    },
-    {
-      name: 'Blue Bell',
-      color: '#2879a3',
-      logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Blue_Bell_logo.svg/1200px-Blue_Bell_logo.svg.png',
-      description: 'Southern favorite with creamy textures and classic flavors.',
-      flavors: [
-        {
-          name: 'Homemade Vanilla',
-          img: 'https://www.bluebell.com/sites/default/files/styles/product_image/public/2018-10/Blue-Bell-Homemade-Vanilla.png'
-        },
-        {
-          name: 'Dutch Chocolate',
-          img: 'https://www.bluebell.com/sites/default/files/styles/product_image/public/2018-10/Blue-Bell-Dutch-Chocolate.png'
-        },
-        {
-          name: 'Strawberry',
-          img: 'https://www.bluebell.com/sites/default/files/styles/product_image/public/2018-10/Blue-Bell-Strawberry.png'
-        },
-        {
-          name: 'Cookies ’n Cream',
-          img: 'https://www.bluebell.com/sites/default/files/styles/product_image/public/2018-10/Blue-Bell-Cookies-N-Cream.png'
-        },
-      ],
-    },
-  ];
-
-  const galleryImages = [
-    'https://images.unsplash.com/photo-1505253210343-c4f6657d2f3e?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1526045612212-70caf35c14df?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1528821154947-8e06a00d8f44?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1551022370-69c18f32f46e?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1525755662778-989d0524087e?auto=format&fit=crop&w=800&q=80',
-  ];
-
-  const container = document.getElementById('brandsContainer');
-  const gallery = document.getElementById('icecreamGallery');
-
-  function createBrandCard(brand) {
-    const card = document.createElement('div');
-    card.classList.add('card');
-    card.style.setProperty('--brand-color', brand.color);
-
-    card.innerHTML = `
-      <div class="brand-header">
-        <img class="brand-logo" src="${brand.logo}" alt="${brand.name} logo" />
-        <h2 class="brand-name">${brand.name}</h2>
-      </div>
-      <p class="brand-desc">${brand.description}</p>
-      <div class="flavors-section">
-        <h3 class="flavors-title">Popular Flavors</h3>
-        <div class="flavors-grid">
-          ${brand.flavors.map(flavor => `
-            <div class="flavor-card" title="${flavor.name}">
-              <img src="${flavor.img}" alt="${flavor.name}" />
-              <div>${flavor.name}</div>
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    `;
-
-    return card;
-  }
-
-  function renderBrands(list) {
-    container.innerHTML = '';
-    if (list.length === 0) {
-      container.innerHTML = `<p class="no-results">No brands or flavors found.</p>`;
-      return;
-    }
-    list.forEach(brand => container.appendChild(createBrandCard(brand)));
-  }
-
-  function filterBrands() {
-    const query = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = brands.filter(brand => {
-      if (brand.name.toLowerCase().includes(query)) return true;
-      // Check flavors
-      for (const flavor of brand.flavors) {
-        if (flavor.name.toLowerCase().includes(query)) return true;
-      }
-      return false;
-    });
-    renderBrands(filtered);
-  }
-
-  function renderGallery() {
-    gallery.innerHTML = '';
-    galleryImages.forEach(src => {
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = "Delicious ice cream";
-      gallery.appendChild(img);
-    });
-  }
-
-  // Initial render
-  renderBrands(brands);
-  renderGallery();
-
-</script>
-
-</body>
-</html>
+          img: 'https://
+          return
+        }
