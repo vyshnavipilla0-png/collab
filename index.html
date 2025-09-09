@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Manga Artists Dashboard</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f5f5;
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    background-color: #1e1e2f;
+    color: white;
+    padding: 1rem 2rem;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+  .container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  .artist-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.1);
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    transition: box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  .artist-card:hover {
+    box-shadow: 0 8px 20px rgb(0 0 0 / 0.2);
+  }
+  .artist-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .artist-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #1e1e2f;
+  }
+  .artist-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  .artist-info {
+    margin-top: 0.4rem;
+    color: #555;
+  }
+  .collections {
+    margin-top: 1rem;
+  }
+  .collection-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  .collection-list {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  .collection-list li {
+    padding: 0.3rem 0;
+    border-bottom: 1px solid #eee;
+  }
+  .collection-list li:last-child {
+    border-bottom: none;
+  }
+  /* Search bar */
+  #searchInput {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 30px;
+    border: 1.5px solid #ccc;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  #searchInput:focus {
+    border-color: #1e1e2f;
+  }
+</style>
+</head>
+<body>
+
+<header>Manga Artists Dashboard</header>
+
+<div class="container">
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Search for artists or manga titles..."
+    oninput="filterArtists()"
+  />
+
+  <div id="artistsContainer">
+    <!-- Artists will be inserted here by JS -->
+  </div>
+</div>
+
+<script>
+  const artists = [
+    {
+      name: 'Rumiko Takahashi',
+      photo:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Rumiko_Takahashi_2019.png/220px-Rumiko_Takahashi_2019.png',
+      bio: 'Famous for Inuyasha, Ranma ½, and Urusei Yatsura.',
+      collections: [
+        'Inuyasha',
+        'Ranma ½',
+        'Urusei Yatsura',
+        'Maison Ikkoku',
+        'Rin-ne',
+      ],
+    },
+    {
+      name: 'Eiichiro Oda',
+      photo:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Eiichiro_Oda_2014.jpg/220px-Eiichiro_Oda_2014.jpg',
+      bio: 'Creator of the legendary One Piece manga.',
+      collections: ['One Piece'],
+    },
+    {
+      name: 'Masashi Kishimoto',
+      photo:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Masashi_Kishimoto_in_2009.jpg/220px-Masashi_Kishimoto_in_2009.jpg',
+      bio: 'Known for the Naruto series.',
+      collections: ['Naruto', 'Naruto Shippuden', 'Boruto'],
+    },
+    {
+      name: 'CLAMP',
+      photo:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/CLAMP_at_BookExpo_America_2006.jpg/220px-CLAMP_at_BookExpo_America_2006.jpg',
+      bio: 'A group of female manga artists known for various works.',
+      collections: ['Cardcaptor Sakura', 'xxxHolic', 'Tsubasa: Reservoir Chronicle'],
+    },
+    {
+      name: 'Akira Toriyama',
+      photo:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Akira_Toriyama_2008.jpg/220px-Akira_Toriyama_2008.jpg',
+      bio: 'Creator of Dragon Ball and Dr. Slump.',
+      collections: ['Dragon Ball', 'Dr. Slump'],
+    },
+  ];
+
+  const container = document.getElementById('artistsContainer');
+
+  function renderArtists(list) {
+    container.innerHTML = '';
+
+    if (list.length === 0) {
+      container.innerHTML = '<p>No artists or manga found.</p>';
+      return;
+    }
+
+    list.forEach((artist) => {
+      const card = document.createElement('div');
+      card.className = 'artist-card';
+
+      card.innerHTML = `
+        <div class="artist-header">
+          <img src="${artist.photo}" alt="${artist.name}" class="artist-photo" />
+          <div>
+            <h2 class="artist-name">${artist.name}</h2>
+            <p class="artist-info">${artist.bio}</p>
+          </div>
+        </div>
+        <div class="collections">
+          <h3 class="collection-title">Collections:</h3>
+          <ul class="collection-list">
+            ${artist.collections
+              .map((col) => `<li>${col}</li>`)
+              .join('')}
+          </ul>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+  }
+
+  function filterArtists() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const filtered = artists.filter((artist) => {
+      if (artist.name.toLowerCase().includes(query)) return true;
+      for (const manga of artist.collections) {
+        if (manga.toLowerCase().includes(query)) return true;
+      }
+      return false;
+    });
+    renderArtists(filtered);
+  }
+
+  // Initial render
+  renderArtists(artists);
+</script>
+
+</body>
+</html>
