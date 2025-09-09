@@ -3,203 +3,258 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Ice Cream Brands Dashboard</title>
+<title>Manga Artists Collection Dashboard</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Permanent+Marker&display=swap');
+
+  /* Reset */
+  * {
+    box-sizing: border-box;
+    margin: 0; padding: 0;
+  }
+
   body {
-    font-family: 'Arial', sans-serif;
-    background: #fff8f0;
-    margin: 0;
-    padding: 0;
-    color: #3a3a3a;
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #ffefba 0%, #ffffff 100%);
+    min-height: 100vh;
+    padding: 2rem;
+    color: #222;
   }
-  header {
-    background-color: #ff6f61;
-    color: white;
-    padding: 1.2rem 2rem;
+
+  h1 {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 3rem;
+    color: #d32f2f;
     text-align: center;
-    font-size: 2rem;
-    font-weight: bold;
-    box-shadow: 0 4px 8px rgba(255,111,97,0.3);
-  }
-  .container {
-    max-width: 900px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-  }
-  #searchInput {
-    width: 100%;
-    padding: 0.7rem 1rem;
-    font-size: 1rem;
-    border-radius: 30px;
-    border: 2px solid #ff6f61;
     margin-bottom: 2rem;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  }
+
+  #searchInput {
+    display: block;
+    margin: 0 auto 3rem auto;
+    width: 320px;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    border: 2px solid #d32f2f;
+    border-radius: 30px;
     outline: none;
-    transition: border-color 0.3s ease;
-  }
-  #searchInput:focus {
-    border-color: #ff3b20;
-  }
-  .brand-card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 3px 12px rgba(255,111,97,0.2);
-    margin-bottom: 1.8rem;
-    padding: 1.5rem;
-    cursor: pointer;
     transition: box-shadow 0.3s ease;
   }
-  .brand-card:hover {
-    box-shadow: 0 8px 22px rgba(255,59,32,0.35);
+  #searchInput:focus {
+    box-shadow: 0 0 10px #d32f2f;
   }
-  .brand-header {
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* Card Flip Container */
+  .card {
+    perspective: 1200px;
+  }
+
+  /* Card Inner */
+  .card-inner {
+    position: relative;
+    width: 100%;
+    padding-top: 140%; /* 5:7 ratio */
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    border-radius: 15px;
+    box-shadow: 0 12px 20px rgba(211, 47, 47, 0.2);
+  }
+  .card:hover .card-inner {
+    transform: rotateY(180deg);
+  }
+
+  /* Front and Back Faces */
+  .card-front, .card-back {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    backface-visibility: hidden;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 1.2rem;
+    padding: 1.5rem;
+    background: white;
   }
-  .brand-logo {
-    width: 90px;
-    height: 90px;
+
+  .card-front {
+    box-shadow: inset 0 0 60px rgba(211,47,47,0.1);
+  }
+
+  .card-front img {
     border-radius: 50%;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
-    border: 3px solid #ff6f61;
+    border: 3px solid #d32f2f;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 2px 2px rgba(211,47,47,0.2));
   }
-  .brand-name {
-    font-size: 1.6rem;
+
+  .artist-name {
     font-weight: 700;
-    margin: 0;
-    color: #ff3b20;
+    font-size: 1.3rem;
+    color: #d32f2f;
+    margin-bottom: 0.25rem;
+    text-align: center;
   }
-  .brand-desc {
-    margin-top: 0.4rem;
+
+  .artist-bio {
     font-style: italic;
-    color: #666;
+    font-size: 0.9rem;
+    color: #555;
+    text-align: center;
+    flex-grow: 1;
   }
-  .collections {
-    margin-top: 1rem;
+
+  /* Back face */
+  .card-back {
+    background: #d32f2f;
+    color: white;
+    transform: rotateY(180deg);
+    padding-top: 2rem;
+    justify-content: flex-start;
+    box-shadow: inset 0 0 40px rgba(255, 255, 255, 0.15);
   }
+
   .collections-title {
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-    color: #b34733;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.25);
   }
+
   .collection-list {
     list-style: none;
     padding-left: 0;
+    max-height: 130px;
+    overflow-y: auto;
+  }
+  .collection-list::-webkit-scrollbar {
+    width: 6px;
+  }
+  .collection-list::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.3);
+    border-radius: 3px;
   }
   .collection-list li {
-    padding: 0.4rem 0;
-    border-bottom: 1px solid #eee;
-    font-weight: 500;
+    padding: 0.3rem 0;
+    font-weight: 600;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
   }
   .collection-list li:last-child {
     border-bottom: none;
   }
-  p.no-results {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #ff6f61;
-    margin-top: 3rem;
+
+  /* Responsive tweaks */
+  @media (max-width: 400px) {
+    #searchInput {
+      width: 90%;
+    }
   }
 </style>
 </head>
 <body>
 
-<header>Ice Cream Brands Dashboard</header>
+<h1>Manga Artists Collections</h1>
+<input type="text" id="searchInput" placeholder="Search artist or manga..." oninput="filterArtists()" />
 
-<div class="container">
-  <input
-    type="text"
-    id="searchInput"
-    placeholder="Search for brands or flavors..."
-    oninput="filterBrands()"
-  />
-
-  <div id="brandsContainer"></div>
-</div>
+<div class="grid" id="artistsContainer"></div>
 
 <script>
-  const brands = [
+  const artists = [
     {
-      name: 'Ben & Jerry’s',
-      logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Ben_%26_Jerry%27s_logo.svg/1200px-Ben_%26_Jerry%27s_logo.svg.png',
-      description: 'Famous for chunky mix-ins and creative flavors.',
-      collections: ['Cherry Garcia', 'Chunky Monkey', 'Half Baked', 'Phish Food'],
+      name: 'Rumiko Takahashi',
+      photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Rumiko_Takahashi_2019.png/220px-Rumiko_Takahashi_2019.png',
+      bio: 'Legendary creator behind Inuyasha and Ranma ½.',
+      collections: ['Inuyasha', 'Ranma ½', 'Urusei Yatsura', 'Maison Ikkoku', 'Rin-ne'],
     },
     {
-      name: 'Häagen-Dazs',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/7/79/Haagen-Dazs_Logo.svg',
-      description: 'Premium ice cream brand with rich and creamy flavors.',
-      collections: ['Vanilla', 'Belgian Chocolate', 'Strawberry', 'Coffee'],
+      name: 'Eiichiro Oda',
+      photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Eiichiro_Oda_2014.jpg/220px-Eiichiro_Oda_2014.jpg',
+      bio: 'Mastermind of the epic One Piece adventure.',
+      collections: ['One Piece'],
     },
     {
-      name: 'Baskin-Robbins',
-      logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/e3/Baskin-Robbins_logo.svg/1200px-Baskin-Robbins_logo.svg.png',
-      description: 'Known for “31 flavors” – one for each day of the month!',
-      collections: ['Mint Chocolate Chip', 'Pralines ’n Cream', 'Rainbow Sherbet', 'Jamoca'],
+      name: 'Masashi Kishimoto',
+      photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Masashi_Kishimoto_in_2009.jpg/220px-Masashi_Kishimoto_in_2009.jpg',
+      bio: 'Naruto’s creator, shaping ninja lore worldwide.',
+      collections: ['Naruto', 'Naruto Shippuden', 'Boruto'],
     },
     {
-      name: 'Magnum',
-      logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/Magnum_ice_cream_logo.png',
-      description: 'Luxurious ice cream bars with thick chocolate coating.',
-      collections: ['Classic', 'Almond', 'Double Caramel', 'White Chocolate & Cookies'],
+      name: 'CLAMP',
+      photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/CLAMP_at_BookExpo_America_2006.jpg/220px-CLAMP_at_BookExpo_America_2006.jpg',
+      bio: 'Innovative all-female artist group with magical stories.',
+      collections: ['Cardcaptor Sakura', 'xxxHolic', 'Tsubasa: Reservoir Chronicle'],
     },
     {
-      name: 'Blue Bell',
-      logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Blue_Bell_logo.svg/1200px-Blue_Bell_logo.svg.png',
-      description: 'Southern favorite with creamy textures and classic flavors.',
-      collections: ['Homemade Vanilla', 'Dutch Chocolate', 'Strawberry', 'Cookies ’n Cream'],
+      name: 'Akira Toriyama',
+      photo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Akira_Toriyama_2008.jpg/220px-Akira_Toriyama_2008.jpg',
+      bio: 'Iconic creator of Dragon Ball and Dr. Slump.',
+      collections: ['Dragon Ball', 'Dr. Slump'],
     },
   ];
 
-  const container = document.getElementById('brandsContainer');
+  const container = document.getElementById('artistsContainer');
 
-  function renderBrands(list) {
-    container.innerHTML = '';
+  function createArtistCard(artist) {
+    const card = document.createElement('div');
+    card.classList.add('card');
 
-    if (list.length === 0) {
-      container.innerHTML = '<p class="no-results">No brands or flavors found.</p>';
-      return;
-    }
-
-    list.forEach((brand) => {
-      const card = document.createElement('div');
-      card.className = 'brand-card';
-
-      card.innerHTML = `
-        <div class="brand-header">
-          <img src="${brand.logo}" alt="${brand.name} Logo" class="brand-logo" />
-          <div>
-            <h2 class="brand-name">${brand.name}</h2>
-            <p class="brand-desc">${brand.description}</p>
-          </div>
+    card.innerHTML = `
+      <div class="card-inner">
+        <div class="card-front">
+          <img src="${artist.photo}" alt="${artist.name}" />
+          <h3 class="artist-name">${artist.name}</h3>
+          <p class="artist-bio">${artist.bio}</p>
         </div>
-        <div class="collections">
-          <h3 class="collections-title">Flavors:</h3>
+        <div class="card-back">
+          <h3 class="collections-title">Collections</h3>
           <ul class="collection-list">
-            ${brand.collections.map(flavor => `<li>${flavor}</li>`).join('')}
+            ${artist.collections.map(manga => `<li>${manga}</li>`).join('')}
           </ul>
         </div>
-      `;
+      </div>
+    `;
 
-      container.appendChild(card);
+    return card;
+  }
+
+  function renderArtists(list) {
+    container.innerHTML = '';
+    if (list.length === 0) {
+      container.innerHTML = `<p style="text-align:center; font-weight:700; color:#d32f2f;">No artists or manga found.</p>`;
+      return;
+    }
+    list.forEach(artist => {
+      container.appendChild(createArtistCard(artist));
     });
   }
 
-  function filterBrands() {
+  function filterArtists() {
     const query = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = brands.filter((brand) => {
-      if (brand.name.toLowerCase().includes(query)) return true;
-      for (const flavor of brand.collections) {
-        if (flavor.toLowerCase().includes(query)) return true;
-      }
-      return false;
+    const filtered = artists.filter(artist => {
+      if (artist.name.toLowerCase().includes(query)) return true;
+      return artist.collections.some(manga => manga.toLowerCase().includes(query));
     });
-    renderBrands(filtered);
+    renderArtists(filtered);
   }
 
-  // Initial render
-  renderBrands(brands);
+  renderArtists(artists);
 </script>
 
 </body>
