@@ -3,185 +3,181 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Manga Artists Dashboard</title>
+<title>Ice Cream Brands Dashboard</title>
 <style>
   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f5f5f5;
+    font-family: 'Arial', sans-serif;
+    background: #fff8f0;
     margin: 0;
     padding: 0;
+    color: #3a3a3a;
   }
   header {
-    background-color: #1e1e2f;
+    background-color: #ff6f61;
     color: white;
-    padding: 1rem 2rem;
+    padding: 1.2rem 2rem;
     text-align: center;
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: bold;
+    box-shadow: 0 4px 8px rgba(255,111,97,0.3);
   }
   .container {
-    max-width: 1000px;
+    max-width: 900px;
     margin: 2rem auto;
     padding: 0 1rem;
   }
-  .artist-card {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 3px 10px rgb(0 0 0 / 0.1);
-    margin-bottom: 1.5rem;
-    padding: 1.5rem;
-    transition: box-shadow 0.3s ease;
-    cursor: pointer;
-  }
-  .artist-card:hover {
-    box-shadow: 0 8px 20px rgb(0 0 0 / 0.2);
-  }
-  .artist-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .artist-photo {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #1e1e2f;
-  }
-  .artist-name {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0;
-  }
-  .artist-info {
-    margin-top: 0.4rem;
-    color: #555;
-  }
-  .collections {
-    margin-top: 1rem;
-  }
-  .collection-title {
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 0.5rem;
-  }
-  .collection-list {
-    list-style-type: none;
-    padding-left: 0;
-  }
-  .collection-list li {
-    padding: 0.3rem 0;
-    border-bottom: 1px solid #eee;
-  }
-  .collection-list li:last-child {
-    border-bottom: none;
-  }
-  /* Search bar */
   #searchInput {
     width: 100%;
-    padding: 0.75rem 1rem;
+    padding: 0.7rem 1rem;
     font-size: 1rem;
-    margin-bottom: 2rem;
     border-radius: 30px;
-    border: 1.5px solid #ccc;
+    border: 2px solid #ff6f61;
+    margin-bottom: 2rem;
     outline: none;
     transition: border-color 0.3s ease;
   }
   #searchInput:focus {
-    border-color: #1e1e2f;
+    border-color: #ff3b20;
+  }
+  .brand-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(255,111,97,0.2);
+    margin-bottom: 1.8rem;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+  }
+  .brand-card:hover {
+    box-shadow: 0 8px 22px rgba(255,59,32,0.35);
+  }
+  .brand-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+  .brand-logo {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ff6f61;
+  }
+  .brand-name {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0;
+    color: #ff3b20;
+  }
+  .brand-desc {
+    margin-top: 0.4rem;
+    font-style: italic;
+    color: #666;
+  }
+  .collections {
+    margin-top: 1rem;
+  }
+  .collections-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #b34733;
+  }
+  .collection-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  .collection-list li {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid #eee;
+    font-weight: 500;
+  }
+  .collection-list li:last-child {
+    border-bottom: none;
+  }
+  p.no-results {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #ff6f61;
+    margin-top: 3rem;
   }
 </style>
 </head>
 <body>
 
-<header>Manga Artists Dashboard</header>
+<header>Ice Cream Brands Dashboard</header>
 
 <div class="container">
   <input
     type="text"
     id="searchInput"
-    placeholder="Search for artists or manga titles..."
-    oninput="filterArtists()"
+    placeholder="Search for brands or flavors..."
+    oninput="filterBrands()"
   />
 
-  <div id="artistsContainer">
-    <!-- Artists will be inserted here by JS -->
-  </div>
+  <div id="brandsContainer"></div>
 </div>
 
 <script>
-  const artists = [
+  const brands = [
     {
-      name: 'Rumiko Takahashi',
-      photo:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Rumiko_Takahashi_2019.png/220px-Rumiko_Takahashi_2019.png',
-      bio: 'Famous for Inuyasha, Ranma ½, and Urusei Yatsura.',
-      collections: [
-        'Inuyasha',
-        'Ranma ½',
-        'Urusei Yatsura',
-        'Maison Ikkoku',
-        'Rin-ne',
-      ],
+      name: 'Ben & Jerry’s',
+      logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Ben_%26_Jerry%27s_logo.svg/1200px-Ben_%26_Jerry%27s_logo.svg.png',
+      description: 'Famous for chunky mix-ins and creative flavors.',
+      collections: ['Cherry Garcia', 'Chunky Monkey', 'Half Baked', 'Phish Food'],
     },
     {
-      name: 'Eiichiro Oda',
-      photo:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Eiichiro_Oda_2014.jpg/220px-Eiichiro_Oda_2014.jpg',
-      bio: 'Creator of the legendary One Piece manga.',
-      collections: ['One Piece'],
+      name: 'Häagen-Dazs',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/7/79/Haagen-Dazs_Logo.svg',
+      description: 'Premium ice cream brand with rich and creamy flavors.',
+      collections: ['Vanilla', 'Belgian Chocolate', 'Strawberry', 'Coffee'],
     },
     {
-      name: 'Masashi Kishimoto',
-      photo:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Masashi_Kishimoto_in_2009.jpg/220px-Masashi_Kishimoto_in_2009.jpg',
-      bio: 'Known for the Naruto series.',
-      collections: ['Naruto', 'Naruto Shippuden', 'Boruto'],
+      name: 'Baskin-Robbins',
+      logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/e3/Baskin-Robbins_logo.svg/1200px-Baskin-Robbins_logo.svg.png',
+      description: 'Known for “31 flavors” – one for each day of the month!',
+      collections: ['Mint Chocolate Chip', 'Pralines ’n Cream', 'Rainbow Sherbet', 'Jamoca'],
     },
     {
-      name: 'CLAMP',
-      photo:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/CLAMP_at_BookExpo_America_2006.jpg/220px-CLAMP_at_BookExpo_America_2006.jpg',
-      bio: 'A group of female manga artists known for various works.',
-      collections: ['Cardcaptor Sakura', 'xxxHolic', 'Tsubasa: Reservoir Chronicle'],
+      name: 'Magnum',
+      logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2e/Magnum_ice_cream_logo.png',
+      description: 'Luxurious ice cream bars with thick chocolate coating.',
+      collections: ['Classic', 'Almond', 'Double Caramel', 'White Chocolate & Cookies'],
     },
     {
-      name: 'Akira Toriyama',
-      photo:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Akira_Toriyama_2008.jpg/220px-Akira_Toriyama_2008.jpg',
-      bio: 'Creator of Dragon Ball and Dr. Slump.',
-      collections: ['Dragon Ball', 'Dr. Slump'],
+      name: 'Blue Bell',
+      logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Blue_Bell_logo.svg/1200px-Blue_Bell_logo.svg.png',
+      description: 'Southern favorite with creamy textures and classic flavors.',
+      collections: ['Homemade Vanilla', 'Dutch Chocolate', 'Strawberry', 'Cookies ’n Cream'],
     },
   ];
 
-  const container = document.getElementById('artistsContainer');
+  const container = document.getElementById('brandsContainer');
 
-  function renderArtists(list) {
+  function renderBrands(list) {
     container.innerHTML = '';
 
     if (list.length === 0) {
-      container.innerHTML = '<p>No artists or manga found.</p>';
+      container.innerHTML = '<p class="no-results">No brands or flavors found.</p>';
       return;
     }
 
-    list.forEach((artist) => {
+    list.forEach((brand) => {
       const card = document.createElement('div');
-      card.className = 'artist-card';
+      card.className = 'brand-card';
 
       card.innerHTML = `
-        <div class="artist-header">
-          <img src="${artist.photo}" alt="${artist.name}" class="artist-photo" />
+        <div class="brand-header">
+          <img src="${brand.logo}" alt="${brand.name} Logo" class="brand-logo" />
           <div>
-            <h2 class="artist-name">${artist.name}</h2>
-            <p class="artist-info">${artist.bio}</p>
+            <h2 class="brand-name">${brand.name}</h2>
+            <p class="brand-desc">${brand.description}</p>
           </div>
         </div>
         <div class="collections">
-          <h3 class="collection-title">Collections:</h3>
+          <h3 class="collections-title">Flavors:</h3>
           <ul class="collection-list">
-            ${artist.collections
-              .map((col) => `<li>${col}</li>`)
-              .join('')}
+            ${brand.collections.map(flavor => `<li>${flavor}</li>`).join('')}
           </ul>
         </div>
       `;
@@ -190,20 +186,20 @@
     });
   }
 
-  function filterArtists() {
+  function filterBrands() {
     const query = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = artists.filter((artist) => {
-      if (artist.name.toLowerCase().includes(query)) return true;
-      for (const manga of artist.collections) {
-        if (manga.toLowerCase().includes(query)) return true;
+    const filtered = brands.filter((brand) => {
+      if (brand.name.toLowerCase().includes(query)) return true;
+      for (const flavor of brand.collections) {
+        if (flavor.toLowerCase().includes(query)) return true;
       }
       return false;
     });
-    renderArtists(filtered);
+    renderBrands(filtered);
   }
 
   // Initial render
-  renderArtists(artists);
+  renderBrands(brands);
 </script>
 
 </body>
